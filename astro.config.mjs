@@ -5,14 +5,13 @@ import tailwind from "@astrojs/tailwind";
 export default defineConfig({
     integrations: [
       tailwind({
-      // Di sini kita memasukkan plugin Typography
       configFile: './tailwind.config.mjs',
       applyBaseStyles: false,
     }),
     sanity({
-      projectId: "5m3eg18d", // Ganti nanti setelah setup Sanity
-        dataset: "production",
-        useCdn: false, // Set to true in production
+      projectId: process.env.PUBLIC_SANITY_PROJECT_ID || "5m3eg18d", 
+      dataset: process.env.PUBLIC_SANITY_DATASET || "production",
+        useCdn: false, 
         apiVersion: "2024-03-10",
         }),
     ],
