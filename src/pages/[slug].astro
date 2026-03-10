@@ -1,0 +1,50 @@
+---
+// src/pages/blog/[slug].astro
+import MainLayout from "../../layouts/MainLayout.astro";
+import { sanityClient } from "sanity:client";
+import { PortableText } from "astro-portabletext";
+import { urlFor } from "../../lib/urlFor";
+
+export async function getStaticPaths() {
+  const posts = await sanityClient.fetch(`*[_type == "post"]`);
+  return posts.map((post) => ({
+    params: { slug: post.slug.current },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+---
+
+<MainLayout title={post.title}>
+  <article class="max-w-4xl mx-auto px-4 py-16">
+    <h1 class="text-5xl font-black text-slate-900 mb-6 leading-tight">
+      {post.title}
+    </h1>
+    
+    <div class="flex items-center gap-4 text-slate-500 mb-10 border-b pb-6 text-sm">
+      <span>Oleh: Lab Kreasi</span>
+      <span>•</span>
+      <span>{new Date(post._createdAt).toLocaleDateString('id-ID', { dateStyle: 'long' })}</span>
+    </div>
+
+    {post.image && (
+      <img 
+        src={urlFor(post.image).width(1200).url()} 
+        alt={post.title}
+        class="w-full rounded-3xl shadow-2xl mb-12 shadow-indigo-100"
+      />
+    )}
+
+    <div class="prose prose-indigo prose-lg lg:prose-xl max-w-none text-slate-700">
+      <PortableText value={post.content} />
+    </div>
+
+    <div class="mt-20 pt-10 border-t border-slate-100">
+      <a href="/" class="group flex items-center gap-2 text-indigo-600 font-bold">
+        <span class="group-hover:-translate-x-1 transition-transform">←</span> 
+        Kembali ke Beranda
+      </a>
+    </div>
+  </article>
+</MainLayout>

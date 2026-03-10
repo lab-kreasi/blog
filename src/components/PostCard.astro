@@ -1,0 +1,29 @@
+---
+// src/components/PostCard.astro
+import { urlFor } from "../lib/urlFor"; // Pastikan path ini benar
+const { post } = Astro.props;
+---
+
+<div class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all">
+  {post.image && (
+    <div class="aspect-video overflow-hidden">
+      <img 
+        src={urlFor(post.image).width(600).format('webp').url()} 
+        alt={post.title}
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+      />
+    </div>
+  )}
+  
+  <div class="p-6">
+    <a href={`/blog/${post.slug.current}`}>
+      <h2 class="text-xl font-bold group-hover:text-indigo-600 mb-2">{post.title}</h2>
+    </a>
+    <p class="text-slate-500 text-sm italic mb-4">
+      {new Date(post._createdAt).toLocaleDateString('id-ID')}
+    </p>
+    <a href={`/blog/${post.slug.current}`} class="text-indigo-600 font-semibold text-sm">
+      Baca →
+    </a>
+  </div>
+</div>

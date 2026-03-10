@@ -1,0 +1,22 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import PostCard from "../components/PostCard.astro";
+import { sanityClient } from "sanity:client";
+
+const posts = await sanityClient.fetch(`*[_type == "post"] | order(_createdAt desc)`);
+---
+
+<MainLayout title="Beranda | Lab Kreasi">
+  <div class="py-12 border-b border-slate-200 mb-12">
+    <h1 class="text-6xl font-black text-slate-900 tracking-tighter mb-4">
+      Lab <span class="text-indigo-600">Kreasi.</span>
+    </h1>
+    <p class="text-xl text-slate-500 max-w-2xl">
+      Tempat berbagi dokumentasi, kode, dan ide-ide kreatif seputar teknologi.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
+</MainLayout>
